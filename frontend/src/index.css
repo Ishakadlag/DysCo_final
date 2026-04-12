@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5.0.2/index.css');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Kanit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --------------------------------
+   DYSLEXIA THEME DESIGN TOKENS
+-------------------------------- */
+body.dyslexia-mode.theme-cream {
+  --dyslexia-bg: #fdf6e3;
+  --dyslexia-text: #2b2b2b;
+  --dyslexia-text-secondary: #555555;
+  --dyslexia-card-bg: #ffffff;
+  --dyslexia-border: #dddddd;
+  --dyslexia-hover: #fff3b0;
+}
+
+body.dyslexia-mode.theme-blue {
+  --dyslexia-bg: #e3f2fd;
+  --dyslexia-text: #0d47a1;
+  --dyslexia-text-secondary: #1565c0;
+  --dyslexia-card-bg: #ffffff;
+  --dyslexia-border: #90caf9;
+  --dyslexia-hover: #bbdefb;
+}
+
+
+
+
+/* --------------------------------
+   PRIMARY LAYOUT MAPPINGS
+-------------------------------- */
+body.dyslexia-mode {
+  background-color: var(--dyslexia-bg) !important;
+  color: var(--dyslexia-text) !important;
+}
+
+body.dyslexia-mode *,
+body.dyslexia-mode .main__content__container,
+body.dyslexia-mode .sidebar__container,
+body.dyslexia-mode .dashboard__header,
+body.dyslexia-mode .dashboard__page__container,
+body.dyslexia-mode .quiz-container,
+body.dyslexia-mode .notes__main__container,
+body.dyslexia-mode .summary__main__container,
+body.dyslexia-mode .flashcard-container {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.08em !important;
+  line-height: 2.2 !important;
+  color: var(--dyslexia-text) !important;
+}
+
+/* Background overrides for primary panels */
+body.dyslexia-mode,
+body.dyslexia-mode .main__content__container,
+body.dyslexia-mode .dashboard__page__container,
+body.dyslexia-mode .quiz-container,
+body.dyslexia-mode .notes__page__wrapper,
+body.dyslexia-mode .stt__main__container,
+body.dyslexia-mode .summary__main__container {
+  background: var(--dyslexia-bg) !important;
+  color: var(--dyslexia-text) !important;
+}
+
+/* Background overrides for Cards / Modals */
+body.dyslexia-mode .note__card,
+body.dyslexia-mode .flashcard,
+body.dyslexia-mode .flashcard-inner,
+body.dyslexia-mode .flashcard-front,
+body.dyslexia-mode .flashcard-back,
+body.dyslexia-mode .profile-card,
+body.dyslexia-mode .type-card,
+body.dyslexia-mode .stat-box,
+body.dyslexia-mode .profile-section,
+body.dyslexia-mode .achievements-section,
+body.dyslexia-mode .achievement-badge,
+body.dyslexia-mode .history-section,
+body.dyslexia-mode .profile-analytics-card,
+body.dyslexia-mode .profile-analytics-card--type {
+  background: var(--dyslexia-card-bg) !important;
+  background-color: var(--dyslexia-card-bg) !important;
+  border-color: var(--dyslexia-border) !important;
+  color: var(--dyslexia-text) !important;
+}
+
+
+/* --------------------------------
+   INPUTS & DROPDOWNS
+-------------------------------- */
+body.dyslexia-mode textarea,
+body.dyslexia-mode select,
+body.dyslexia-mode input[type="text"],
+body.dyslexia-mode input[type="number"] {
+  background: var(--dyslexia-card-bg) !important;
+  background-color: var(--dyslexia-card-bg) !important;
+  color: var(--dyslexia-text) !important;
+  border: 2px solid var(--dyslexia-border) !important;
+  transition: all 0.3s ease;
+}
+
+body.dyslexia-mode textarea::placeholder,
+body.dyslexia-mode input::placeholder {
+  color: #888888 !important;
+  opacity: 1;
+}
+
+/* --------------------------------
+   BUTTONS
+-------------------------------- */
+body.dyslexia-mode .primary__btn {
+  background-color: #4f8cff !important;
+  color: white !important;
+  border: none !important;
+  transition: background-color 0.3s ease;
+}
+
+body.dyslexia-mode .primary__btn:hover {
+  background-color: #7ba2ff !important;
+}
+
+body.dyslexia-mode .share__btn {
+  background-color: #ff6b6b !important;
+  color: white !important;
+}
+
+/* --------------------------------
+   NAVIGATION TABS
+-------------------------------- */
+body.dyslexia-mode .sidebar__btn,
+body.dyslexia-mode .tab {
+  background: var(--dyslexia-card-bg) !important;
+  color: var(--dyslexia-text) !important;
+  border: 1px solid var(--dyslexia-border) !important;
+  transition: all 0.3s ease;
+}
+
+body.dyslexia-mode .sidebar__btn.active-tab,
+body.dyslexia-mode .tab.active {
+  background: #4f8cff !important;
+  color: white !important;
+  border-color: #4f8cff !important;
+}
+
+/* --------------------------------
+   READABLE LAYOUT & FOCUS ASSIST
+-------------------------------- */
+body.dyslexia-mode .note__text p,
+body.dyslexia-mode .modal__content p,
+body.dyslexia-mode .summary__content > div:first-child,
+body.dyslexia-mode .flashcard p,
+body.dyslexia-mode .flashcard-inner p,
+body.dyslexia-mode .flashcard-front p,
+body.dyslexia-mode .flashcard-back p,
+body.dyslexia-mode .question-text {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+  padding: 12px 18px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dyslexia-mode .note__text p:hover,
+body.dyslexia-mode .modal__content p:hover,
+body.dyslexia-mode .summary__content > div:first-child:hover,
+body.dyslexia-mode .flashcard p:hover,
+body.dyslexia-mode .flashcard-inner p:hover,
+body.dyslexia-mode .flashcard-front p:hover,
+body.dyslexia-mode .flashcard-back p:hover,
+body.dyslexia-mode .question-text:hover {
+  background-color: var(--dyslexia-hover) !important;
+  color: var(--dyslexia-text) !important;
+}

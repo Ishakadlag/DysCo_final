@@ -1,0 +1,21 @@
+# Ignore modules
+node_modules/
+
+# Ignore environment files
+.env
+.env.local
+
+# Ignore test huggingface / openai scripts we created
+test_hf*.cjs
+test_hf*.js
+test_openai*.js
+test_openai*.cjs
+tmp_check*.js
+tmp_check*.ps1
+
+# Ignore temporary error text logs
+err*.txt
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

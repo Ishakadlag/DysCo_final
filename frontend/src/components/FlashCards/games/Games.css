@@ -1,0 +1,487 @@
+/* Games Container */
+.games__container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.games__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px 0;
+}
+
+.game__card {
+  background-color: #f0f8ff;
+  border: 2px solid #e0e8f0;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.game__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: #4a90e2;
+}
+
+.game__card h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.game__card p {
+  margin: 0;
+  color: #666;
+  flex-grow: 1;
+}
+
+.game__level {
+  background-color: #4a90e2;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  align-self: flex-start;
+}
+
+.no__cards__message {
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Individual Game Styles */
+.game__container {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.game__header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.game__stats {
+  display: flex;
+  gap: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.game__won {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.game__results {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.game__results h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.result__message {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.game__controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Memory Match Game */
+.memory__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 18px;
+  margin: 20px 0;
+  max-width: 680px;
+  justify-items: center;
+}
+
+.memory__card {
+  width: 100%;
+  min-width: 120px;
+  max-width: 220px;
+  aspect-ratio: 1;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.memory__card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.memory__card.flipped .memory__card__inner {
+  transform: rotateY(180deg);
+}
+
+.memory__card__front,
+.memory__card__back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.memory__card__front {
+  background: linear-gradient(145deg, #4a90e2, #5aa7ff);
+  color: white;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.memory__card__back {
+  background-color: #ffffff;
+  transform: rotateY(180deg);
+  border: 2px solid #d6e5f9;
+  overflow: hidden;
+  padding: 0;
+}
+
+.memory__card__back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memory__card.matched {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+.memory__card.matched .memory__card__back,
+.memory__card.matched .memory__card__front {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+@media screen and (max-width: 650px) {
+  .memory__grid {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .memory__grid {
+    grid-template-columns: repeat(1, minmax(100px, 1fr));
+  }
+}
+
+/* Multiple Choice Game */
+.question__container {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.question__card {
+  margin-bottom: 20px;
+}
+
+.question__card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.question__hint {
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
+.options__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.option__btn {
+  padding: 15px;
+  border: 2px solid #e0e8f0;
+  border-radius: 10px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.option__btn:hover:not(:disabled) {
+  background-color: #f0f8ff;
+  border-color: #4a90e2;
+}
+
+.option__btn.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.option__btn.incorrect {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.result__feedback {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.correct__feedback {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.incorrect__feedback {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Word Builder Game */
+.wordbuilder__container {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wordbuilder__card {
+  margin-bottom: 20px;
+}
+
+.wordbuilder__card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.wordbuilder__hint {
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
+.input__section {
+  margin-top: 20px;
+}
+
+.word__input {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  border: 2px solid #e0e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.word__input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+/* Category Sort Game */
+.sort__game__container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px 0;
+}
+
+.cards__pool {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.unsorted__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.categories__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.category__dropzone {
+  border: 2px dashed #e0e8f0;
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 300px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.category__dropzone:hover {
+  border-color: #4a90e2;
+  background-color: #f0f8ff;
+}
+
+.category__dropzone h3 {
+  margin: 0 0 15px 0;
+  text-align: center;
+  color: #333;
+}
+
+.category__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sortable__card {
+  background-color: white;
+  border: 2px solid #e0e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: move;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.sortable__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sortable__card img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.sortable__card p {
+  margin: 0;
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+.sortable__card.placed {
+  border-color: #28a745;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .memory__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .options__container {
+    grid-template-columns: 1fr;
+  }
+
+  .categories__container {
+    grid-template-columns: 1fr;
+  }
+
+  .game__header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .game__stats {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .memory__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .games__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .question__container,
+  .wordbuilder__container {
+    padding: 20px;
+  }
+
+  .game__controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}

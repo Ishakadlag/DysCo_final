@@ -1,0 +1,96 @@
+.sidebar__desktop__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 0 1rem;
+    margin-bottom: -1px;
+    /* To overlay actively on container */
+    z-index: 10;
+    position: relative;
+}
+
+.sidebar__desktop__container .sidebar__btn,
+.sidebar__desktop__container>span {
+    background-color: #ffffff;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2a44;
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.2s ease;
+}
+
+.sidebar__desktop__container .sidebar__btn:hover,
+.sidebar__desktop__container>span:hover {
+    background-color: #f8fafc;
+}
+
+.sidebar__dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sidebar__dropdown-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    min-width: 200px;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.sidebar__dropdown-content .sidebar__btn {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    width: 100%;
+}
+
+.sidebar__dropdown-content .sidebar__btn:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.sidebar__dropdown-icon {
+    margin-left: 4px;
+    font-size: 0.8rem;
+}
+
+.active-tab {
+    background-color: #ffffff !important;
+    color: #1a445f !important;
+    border: 2px solid #5d87ff !important;
+    border-bottom: 2px solid #ffffff !important;
+}
+
+.sidebar__mobile__container {
+    display: none;
+}
+
+.sidebar__icon {
+    font-size: 1.1rem;
+    color: #4b6797;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar__desktop__container {
+        display: none;
+    }
+
+    .sidebar__mobile__container {
+        display: flex;
+    }
+}
