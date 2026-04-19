@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../../hooks/useAuthContext';
@@ -39,6 +39,8 @@ const PronunciationGame = () => {
   const [score, setScore] = useState(0);
   const [recordedText, setRecordedText] = useState('');
   const [feedback, setFeedback] = useState('');
+  const mediaRecorderRef = useRef(null);
+  const recordingTimeoutRef = useRef(null);
   const { user } = useAuthContext();
   const { sharedText, selectedVoice: sharedVoice } = useTextContext();
 
@@ -88,6 +90,7 @@ const PronunciationGame = () => {
       const voiceToApply = selectedVoice || (voices.length > 0 ? voices[0] : null);
       if (voiceToApply) {
         utterance.voice = voiceToApply;
+        utterance.lang = voiceToApply.lang;
       }
       utterance.onstart = () => {
         setIsPlaying(true);
@@ -142,18 +145,41 @@ const PronunciationGame = () => {
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunks, { type: 'audio/webm' });
         await sendAudioToBackend(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
       };
 
+      mediaRecorderRef.current = mediaRecorder;
       setIsRecording(true);
       mediaRecorder.start();
 
-      setTimeout(() => {
-        mediaRecorder.stop();
-        setIsRecording(false);
-        toast.success('Recording stopped. Processing...');
+      recordingTimeoutRef.current = setTimeout(() => {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+          mediaRecorderRef.current.stop();
+          setIsRecording(false);
+          toast.success('Recording time limit reached. Processing...');
+        }
       }, 15000); // 15 second recording limit
     } catch (error) {
       toast.error('Microphone access denied');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      if (recordingTimeoutRef.current) {
+        clearTimeout(recordingTimeoutRef.current);
+      }
+      toast.success('Recording stopped. Processing...');
+    }
+  };
+
+  const handleRecordingToggle = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
     }
   };
 
@@ -167,6 +193,9 @@ const PronunciationGame = () => {
 
       const formData = new FormData();
       formData.append('file', file);
+      if (selectedVoice && selectedVoice.lang) {
+        formData.append('language', selectedVoice.lang.split('-')[0]);
+      }
 
       const config = {
         headers: {
@@ -328,10 +357,9 @@ const PronunciationGame = () => {
 
             <button 
               className={`game__btn record__btn ${isRecording ? 'recording' : ''}`}
-              onClick={startRecording}
-              disabled={isRecording}
+              onClick={handleRecordingToggle}
             >
-              {isRecording ? '🔴 Recording... (5 sec)' : '🎙️ Start Recording'}
+              {isRecording ? '⏹️ Stop & Submit' : '🎙️ Start Recording'}
             </button>
 
             {recordedText && (

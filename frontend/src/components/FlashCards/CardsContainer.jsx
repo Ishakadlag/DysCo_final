@@ -11,25 +11,26 @@ const FlashCardsContainer = () => {
   const [cards, setCards] = useState([]);
   const { user } = useAuthContext()
 
-  useEffect(() => {
-    const fetchAllCards = async () => {
-      try {
-        if(user) {
-          const config = {
-            headers: {
-              Authorization: `Bearer ${user?.accessToken}`,
-            },
-          };
-          const response = await axios.get(`${apiURL}/api/v1/card/`, config);
-          if(response && response.status == 200 && response.data) {
-            setCards(response?.data?.cards)
-          }
+  const fetchAllCards = async () => {
+    try {
+      if(user) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        };
+        const response = await axios.get(`${apiURL}/api/v1/card/`, config);
+        if(response && response.status === 200 && response.data) {
+          setCards(response?.data?.cards)
         }
-      } catch(error) {
-        console.log(error);
-        toast.error(error?.message);
       }
+    } catch(error) {
+      console.log(error);
+      toast.error(error?.message);
     }
+  }
+
+  useEffect(() => {
     fetchAllCards();
   }, [user]);
 
@@ -37,7 +38,14 @@ const FlashCardsContainer = () => {
     <div className='cards__container'>
       {cards?.length > 0 ? (
         cards.map((card) => (
-          <CardComponent key={card._id} id={card._id} name={card.name} description={card.description} imageUrl={card.imageUrl} />
+          <CardComponent 
+            key={card._id} 
+            id={card._id} 
+            name={card.name} 
+            description={card.description} 
+            imageUrl={card.imageUrl} 
+            onSuccessfulAction={fetchAllCards} 
+          />
         ))
       ) : (
         <h1>No cards present</h1>

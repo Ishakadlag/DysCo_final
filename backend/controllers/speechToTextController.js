@@ -33,12 +33,12 @@ const speechToText = async (req, res) => {
 
         const options = {
             smart_format: true,
-            model: 'nova',
         };
 
         if (supportedLanguages.has(language)) {
             options.language = language;
         } else {
+            options.detect_language = true;
             console.warn(`SpeechToText: language '${language}' not recognized; using auto-detect.`);
         }
 

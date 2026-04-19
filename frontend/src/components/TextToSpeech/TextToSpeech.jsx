@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useTextContext } from '../../context/TextContext';
 import { useDyslexiaMode } from '../../hooks/useDyslexiaMode';
+import InteractiveWord from './InteractiveWord';
 import './TextToSpeech.css';
 
 const TextToSpeech = () => {
@@ -12,6 +13,18 @@ const TextToSpeech = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [speechRate, setSpeechRate] = useState(1);
+  const [isReadingMode, setIsReadingMode] = useState(false);
+  
+  const [showVisuals, setShowVisuals] = useState(() => {
+    const saved = localStorage.getItem('showVisuals');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  
+  const handleToggleVisuals = () => {
+    const newVal = !showVisuals;
+    setShowVisuals(newVal);
+    localStorage.setItem('showVisuals', JSON.stringify(newVal));
+  };
   
   // Highlighting states
   const [wordsWithIndices, setWordsWithIndices] = useState([]);
@@ -65,6 +78,8 @@ const TextToSpeech = () => {
       toast.error('Please enter some text to convert.');
       return;
     }
+    
+    setIsReadingMode(true);
 
     if (!('speechSynthesis' in window)) {
       toast.error('Text-to-Speech is not supported in this browser.');
@@ -203,21 +218,21 @@ const TextToSpeech = () => {
     <div className='tts__page__container'>
       <h1>Text to Speech</h1>
       
-      {/* Display readable text ONLY when speaking/paused. Otherwise show textarea for input. */}
-      {isSpeaking || isPaused ? (
+      {/* Display readable text once converted. Switch back via Edit Text. */}
+      {isReadingMode ? (
         <div className='tts__reading__container'>
-          {isDyslexiaMode ? (
-            wordsWithIndices.map((wordObj, i) => (
-              <span 
-                key={i} 
-                className={`tts-span-word ${highlightedIndex === i ? 'highlighted-word' : ''}`}
-              >
-                {wordObj.word}{' '}
-              </span>
-            ))
-          ) : (
-            <p className="tts-plain-text">{text}</p>
-          )}
+          {wordsWithIndices.map((wordObj, i) => (
+            <InteractiveWord
+              key={i}
+              wordObj={wordObj}
+              fullText={text}
+              isDyslexiaMode={isDyslexiaMode}
+              isHighlighted={highlightedIndex === i}
+              selectedVoice={selectedVoice}
+              speechRate={speechRate}
+              showVisuals={showVisuals}
+            />
+          ))}
         </div>
       ) : (
         <textarea
@@ -258,7 +273,25 @@ const TextToSpeech = () => {
         />
       </div>
 
+      <div style={{ margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <input 
+          type="checkbox" 
+          id="visualsToggle"
+          checked={showVisuals}
+          onChange={handleToggleVisuals}
+          style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+        />
+        <label htmlFor="visualsToggle" style={{ fontWeight: '500', cursor: 'pointer' }}>
+          Show Visuals
+        </label>
+      </div>
+
       <div style={{ display: 'flex', gap: '10px' }}>
+        {isReadingMode && (
+          <button className="secondary__btn" onClick={() => { setIsReadingMode(false); handleStop(); }}>
+            Edit Text
+          </button>
+        )}
         <button className="primary__btn" onClick={handleConvertTextToSpeech} disabled={isSpeaking && !isPaused}>
           Convert to Speech
         </button>

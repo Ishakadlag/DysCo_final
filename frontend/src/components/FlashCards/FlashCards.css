@@ -34,6 +34,20 @@
     border-radius: 25px;
     width: 250px;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.card__component > h2 {
+    width: 100%;
+    margin-top: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .card__component > img {
@@ -99,4 +113,62 @@
         width: 90%;
         margin: 10px auto;
     }
+}
+
+/* Edit Mode styling */
+.card__edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-input, .edit-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.edit-input:focus, .edit-textarea:focus {
+    border-color: #4DBF7F;
+    outline: none;
+}
+
+.edit-textarea {
+    resize:vertical;
+    min-height:80px;
+}
+
+.save-btn, .cancel-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.save-btn {
+    background-color: #4DBF7F;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #3ca068;
+}
+
+.cancel-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.cancel-btn:hover {
+    background-color: #ccc;
 }

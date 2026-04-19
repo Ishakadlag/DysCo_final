@@ -13,6 +13,8 @@ const MemoryMatch = ({ cards, onBack }) => {
   const [moves, setMoves] = useState(0);
   const [gameWon, setGameWon] = useState(false);
   const [hasRecorded, setHasRecorded] = useState(false);
+  const [totalPairs, setTotalPairs] = useState(0);
+  const [offsetIndex, setOffsetIndex] = useState(0);
 
   const recordProgress = async (scoreValue, totalValue, passed, gameType = 'flashcards') => {
     if (!user) return;
@@ -30,25 +32,44 @@ const MemoryMatch = ({ cards, onBack }) => {
   };
 
   useEffect(() => {
-    if (gameWon && !hasRecorded) {
+    if (gameWon && !hasRecorded && totalPairs > 0) {
       const scoreValue = matchedCards.length;
-      const totalValue = cards.slice(0, 6).length;
+      const totalValue = totalPairs;
       const passed = scoreValue / totalValue >= 0.6;
       recordProgress(scoreValue, totalValue, passed, 'flashcards');
       setHasRecorded(true);
     }
-  }, [gameWon, hasRecorded, matchedCards.length, cards.length]);
+  }, [gameWon, hasRecorded, matchedCards.length, totalPairs]);
 
 
   useEffect(() => {
     if (cards.length >= 4) {
-      initializeGame();
+      initializeGame(true);
     }
   }, [cards]);
 
-  const initializeGame = () => {
-    // Take first 6 cards and create pairs
-    const selectedCards = cards.slice(0, 6);
+  const initializeGame = (resetOffset = false) => {
+    let startIndex = resetOffset ? 0 : offsetIndex;
+    
+    // Wrap around if we exceed the array length
+    if (startIndex >= cards.length) {
+      startIndex = 0;
+    }
+
+    // Grab up to 6 unique cards sequentially (12 cards total on board)
+    let selectedCards = cards.slice(startIndex, startIndex + 6);
+
+    // If we're at the end of the deck and don't quite have 6 cards, wrap around to borrow from the beginning
+    // Only do this if the user actually has at least 6 total cards!
+    if (selectedCards.length < 6 && cards.length >= 6) {
+      const remainingNeeded = 6 - selectedCards.length;
+      selectedCards = [...selectedCards, ...cards.slice(0, remainingNeeded)];
+    }
+
+    // Update the offset index for the next game round
+    setOffsetIndex((startIndex + 6) % cards.length);
+    setTotalPairs(selectedCards.length);
+
     const pairedCards = [...selectedCards, ...selectedCards].map((card, index) => ({
       ...card,
       uniqueId: `${card._id}-${index}`,
@@ -56,9 +77,9 @@ const MemoryMatch = ({ cards, onBack }) => {
       isMatched: false
     }));
 
-    // Shuffle the cards
-    const shuffledCards = pairedCards.sort(() => Math.random() - 0.5);
-    setGameCards(shuffledCards);
+    // Shuffle the cards on the board
+    const shuffledPairs = pairedCards.sort(() => Math.random() - 0.5);
+    setGameCards(shuffledPairs);
     setFlippedCards([]);
     setMatchedCards([]);
     setMoves(0);
@@ -95,7 +116,7 @@ const MemoryMatch = ({ cards, onBack }) => {
           setFlippedCards([]);
 
           // Check if game is won
-          if (matchedCards.length + 1 === cards.slice(0, 6).length) {
+          if (matchedCards.length + 1 === totalPairs) {
             setGameWon(true);
           }
         }, 1000);
@@ -116,7 +137,7 @@ const MemoryMatch = ({ cards, onBack }) => {
   };
 
   const resetGame = () => {
-    initializeGame();
+    initializeGame(false);
     setHasRecorded(false);
   };
 
@@ -136,7 +157,7 @@ const MemoryMatch = ({ cards, onBack }) => {
         <h2>🧠 Memory Match</h2>
         <div className='game__stats'>
           <span>Moves: {moves}</span>
-          <span>Matches: {matchedCards.length}/{cards.slice(0, 6).length}</span>
+          <span>Matches: {matchedCards.length}/{totalPairs}</span>
         </div>
       </div>
 

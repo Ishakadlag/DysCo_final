@@ -13,6 +13,19 @@ export const useDyslexiaMode = () => {
   });
 
   useEffect(() => {
+    // Listen for custom event
+    const handleSync = () => {
+      setIsDyslexiaMode(localStorage.getItem('dyslexiaMode') === 'true');
+      const savedTheme = localStorage.getItem('dyslexiaTheme');
+      if (savedTheme) {
+         setTheme(savedTheme === 'dark' ? 'cream' : savedTheme);
+      }
+    };
+    window.addEventListener('dyslexia-sync', handleSync);
+    return () => window.removeEventListener('dyslexia-sync', handleSync);
+  }, []);
+
+  useEffect(() => {
     // Clear previously applied theme classes to ensure pure transition
     document.body.classList.remove('theme-cream', 'theme-blue');
 
@@ -27,12 +40,18 @@ export const useDyslexiaMode = () => {
   }, [isDyslexiaMode, theme]);
 
   const toggleDyslexiaMode = () => {
-    setIsDyslexiaMode(prev => !prev);
+    setIsDyslexiaMode(prev => {
+      const newVal = !prev;
+      localStorage.setItem('dyslexiaMode', String(newVal));
+      window.dispatchEvent(new Event('dyslexia-sync'));
+      return newVal;
+    });
   };
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme);
     localStorage.setItem('dyslexiaTheme', newTheme);
+    window.dispatchEvent(new Event('dyslexia-sync'));
   };
 
   return { isDyslexiaMode, toggleDyslexiaMode, theme, changeTheme };

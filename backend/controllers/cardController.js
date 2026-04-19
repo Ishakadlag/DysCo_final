@@ -8,9 +8,13 @@ const CLIENT_ID = process.env.UNSPLASH_ID;
 const createCard = async (req, res) => {
   try {
     const userID = req.user;
-    const { name, description } = req.body; 
-    const response = await axios.get(`https://api.unsplash.com/search/photos/?client_id=${CLIENT_ID}&query=${name}`)
-    const imageUrl = await response?.data?.results?.[1]?.urls?.full || response?.data?.results?.[0]?.urls?.full || '';
+    const { name, description, imageUrl: providedImageUrl } = req.body; 
+    
+    let imageUrl = providedImageUrl;
+    if (!imageUrl) {
+      const response = await axios.get(`https://api.unsplash.com/search/photos/?client_id=${CLIENT_ID}&query=${name}`);
+      imageUrl = response?.data?.results?.[1]?.urls?.regular || response?.data?.results?.[0]?.urls?.regular || response?.data?.results?.[0]?.urls?.full || '';
+    }
 
     const card = new Card({
       name,
@@ -58,6 +62,37 @@ const deleteCard = async (req, res) => {
   }
 };
 
+const updateCard = async (req, res) => {
+  try {
+    const cardID = req.params.id;
+    const { name, description, imageUrl } = req.body;
+
+    const card = await Card.findById(cardID);
+    if (!card) {
+      return res.status(404).json({
+        message: "Card not found",
+      });
+    }
+
+    if (name) card.name = name;
+    if (description !== undefined) card.description = description;
+    if (imageUrl) card.imageUrl = imageUrl;
+
+    const updatedCard = await card.save();
+
+    return res.status(200).json({
+      message: "Card updated successfully",
+      card: updatedCard,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Card update unsuccessful",
+      error: error.message,
+    });
+  }
+};
+
 const getAllCards = async (req, res) => {
   try {
     const userID = req.user;
@@ -77,8 +112,26 @@ const getAllCards = async (req, res) => {
   }
 };
 
+const getWordImage = async (req, res) => {
+  try {
+    const word = req.params.word;
+    const response = await axios.get(`https://api.unsplash.com/search/photos/?client_id=${CLIENT_ID}&query=${word}`);
+    const imageUrl = response?.data?.results?.[1]?.urls?.regular || response?.data?.results?.[0]?.urls?.regular || response?.data?.results?.[0]?.urls?.full || '';
+    
+    return res.status(200).json({ imageUrl });
+  } catch (error) {
+    console.error("Failed to fetch image:", error);
+    return res.status(500).json({
+      message: "Failed to fetch image",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createCard,
   deleteCard,
+  updateCard,
   getAllCards,
+  getWordImage,
 };
